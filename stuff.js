@@ -9,15 +9,20 @@ localforage.setDriver([
   	console.log('Using:' + localforage.driver());
 	localforage.getItem(key)
 	.then(function(value) {
-		console.log('Loaded: ', value);
-		gradVar.innerHTML = value;
+		if (value == null) {
+			localforage.setItem(key, 0)
+			.then(function() {
+				console.log('New User, set ', 0);
+				gradVar.innerHTML = 0;
+		 	}).catch(function(err) {
+		 		console.warn("Error: ", err);
+		 	});
+		} else {
+			console.log('Loaded: ', value);
+			gradVar.innerHTML = value;
+		}
 	}).catch(function(err) {
-		localforage.setItem(key, 0)
-		.then(function() {
-			gradVar.innerHTML = 0;
-		 }).catch(function(err) {
-		 	console.warn("Error: ", err);
-		 });
+		console.warn("ERROR : ", err);
 	});
 });
 
